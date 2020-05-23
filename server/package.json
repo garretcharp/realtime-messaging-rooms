@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "dev": "nodemon index"
+    "dev": "dotenv nodemon index"
   },
   "keywords": [],
   "author": {
@@ -14,10 +14,14 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth2": "^0.2.0",
     "ws": "^7.3.0"
   },
   "repository": {

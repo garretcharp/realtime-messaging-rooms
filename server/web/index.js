@@ -1,8 +1,13 @@
 const express = require('express')
+const session = require('express-session')
 const app = express()
 const routes = require('./routes')
 
-const { generateError } = require('../helpers')
+const { generateError, initPassport } = require('../helpers')
+
+app.use(session({ secret: 'test', resave: false, saveUninitialized: false }))
+
+initPassport(app)
 
 Object.keys(routes).forEach(key => {
   app.use(`/${key}`, routes[key])
