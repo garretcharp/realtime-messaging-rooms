@@ -3,6 +3,10 @@ const passport = require('passport')
 const { Router } = require('express')
 const router = Router()
 
+router.get('/current', (req, res) => {
+  return res.json({ user: req.user })
+})
+
 router.get(
   '/google',
   passport.authenticate('google', {
