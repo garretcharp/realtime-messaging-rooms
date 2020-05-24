@@ -82,8 +82,8 @@ module.exports.initPassport = app => {
         passReqToCallback: true
       },
       (request, accessToken, refreshToken, profile, done) => {
-        console.log(profile)
-        return done(null, { profile })
+        console.log({ profile: profile._json })
+        return done(null, { profile: profile._json })
       }
     )
   )
