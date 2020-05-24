@@ -7,6 +7,11 @@ router.get('/current', (req, res) => {
   return res.json({ user: req.user })
 })
 
+router.get('/logout', function (req, res) {
+  req.logout()
+  res.redirect('http://localhost:3000/')
+})
+
 router.get(
   '/google',
   passport.authenticate('google', {

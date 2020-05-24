@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     border: 'none',
     padding: '5px 32px',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    borderRadius: '20px'
   },
   google: {
     color: 'white',

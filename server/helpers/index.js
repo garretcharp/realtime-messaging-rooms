@@ -83,7 +83,7 @@ module.exports.initPassport = app => {
       },
       (request, accessToken, refreshToken, profile, done) => {
         console.log({ profile: profile._json })
-        return done(null, { profile: profile._json })
+        return done(null, profile._json)
       }
     )
   )
