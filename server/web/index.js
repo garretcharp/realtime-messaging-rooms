@@ -3,7 +3,7 @@ const session = require('express-session')
 const app = express()
 const routes = require('./routes')
 
-const { generateError, initPassport } = require('../helpers')
+const { generateError, initPassport, parseSession } = require('../helpers')
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -11,7 +11,7 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(session({ secret: 'test', resave: false, saveUninitialized: false }))
+app.use(parseSession)
 
 initPassport(app)
 

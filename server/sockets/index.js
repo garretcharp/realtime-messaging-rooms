@@ -1,7 +1,13 @@
 const WebSocket = require('ws')
 const Methods = require('./methods')
 
-const { normalizePort, safeParseJSON, generateError } = require('../helpers')
+const {
+  normalizePort,
+  safeParseJSON,
+  generateError,
+  checkAuthState,
+  broadcast
+} = require('../helpers')
 
 const WSS = new WebSocket.Server({
   port: normalizePort(process.env.SOCKET_PORT || 8080)
@@ -13,7 +19,49 @@ WSS.on('listening', () => {
   )
 })
 
-WSS.on('connection', ws => {
+WSS.on('connection', (ws, req) => {
+  checkAuthState(req, ({ user, state }) => {
+    ws.state = state
+    ws.user = user
+
+    if (state === true) {
+      ws.send(
+        JSON.stringify({
+          type: 'auth',
+          data: {
+            authenticated: true,
+            user
+          }
+        })
+      )
+
+      broadcast(
+        WSS,
+        JSON.stringify({
+          type: 'event',
+          event: 'UserJoin',
+          data: {
+            name: user.name,
+            picture: user.picture
+          }
+        }),
+        ws
+      )
+    } else {
+      ws.send(
+        JSON.stringify({
+          type: 'auth',
+          data: {
+            authenticated: false,
+            user: null
+          }
+        })
+      )
+
+      setTimeout(() => ws.close(), 1000)
+    }
+  })
+
   ws.on('message', message => {
     const data = safeParseJSON(message)
 
@@ -54,3 +102,5 @@ WSS.on('connection', ws => {
     }
   })
 })
+
+module.exports.SocketServer = WSS

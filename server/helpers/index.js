@@ -82,7 +82,6 @@ module.exports.initPassport = app => {
         passReqToCallback: true
       },
       (request, accessToken, refreshToken, profile, done) => {
-        console.log({ profile: profile._json })
         return done(null, profile._json)
       }
     )
@@ -94,5 +93,45 @@ module.exports.initPassport = app => {
 
   passport.deserializeUser((user, done) => {
     done(null, user)
+  })
+}
+
+/**
+ * Sessions/Server (WS & Express)
+ */
+const expressSessions = require('express-session')
+
+module.exports.parseSession = expressSessions({
+  secret: 'something_secret',
+  resave: false,
+  saveUninitialized: false
+})
+
+module.exports.checkAuthState = (req, cb = () => {}) => {
+  this.parseSession(req, {}, () => {
+    console.log(req.session)
+
+    if (!req.session) {
+      cb({ user: null, state: false })
+    } else {
+      const user = req.session.passport
+        ? req.session.passport.user
+        : req.session.passport
+      const state = !!user
+
+      cb({ user, state })
+      console.log({
+        user,
+        state
+      })
+    }
+  })
+}
+
+module.exports.broadcast = (wss, message, excludedClient) => {
+  wss.clients.forEach(client => {
+    if (client.state && client !== excludedClient) {
+      client.send(message)
+    }
   })
 }

@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
 })
 
 export default function UnauthenticatedApp () {
-  console.log('NOT Auth')
   return (
     <div className={css(styles.container)}>
       <h1>Login To Access The App</h1>

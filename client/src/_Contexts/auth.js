@@ -11,8 +11,6 @@ const getUser = async () => {
     })
     const data = await response.json()
 
-    console.log(data)
-
     return Promise.resolve(data.user)
   } catch (error) {
     return Promise.reject(error)
